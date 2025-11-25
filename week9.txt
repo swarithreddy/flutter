@@ -1,0 +1,203 @@
+import 'package:flutter/material.dart';
+import 'LoginScreen.dart';
+
+void main() {
+  runApp(LoginApp());
+}
+
+class LoginApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginScreen(),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+import 'package:flutter/material.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();     // Step 1: Create form key
+  bool isObsecureText = true;                  // Password visibility control
+
+  TextEditingController _emailControlle = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Login Screen"),
+        backgroundColor: Colors.lightBlue,
+      ),
+
+      body: Container(
+        margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+
+        child: Form(
+          key: _formKey,       // Step 2: Assign key to form
+
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: [
+              Image.asset("images/vjit.jpg"),
+
+              Text("Login",
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.w600)),
+
+              SizedBox(height: 30),
+
+              // Email Section
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Employee Email"),
+                  SizedBox(height: 8),
+
+                  TextFormField(
+                    controller: _emailControlle,
+                    keyboardType: TextInputType.emailAddress,
+
+                    validator: (value) {
+                      final inputValue = value ?? "";
+                      if (inputValue.isEmpty) {
+                        return "Please Enter Email";
+                      } else if (!checkEmailValidation(inputValue)) {
+                        return "Please Enter Valid Email";
+                      }
+                      return null;
+                    },
+
+                    decoration: InputDecoration(
+                      hintText: "Please Enter Email",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 30),
+
+              // Password Section
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Password"),
+                  SizedBox(height: 8),
+
+                  TextFormField(
+                    controller: _passwordController,
+                    validator: (value) {
+                      final inputValue = value ?? "";
+                      if (inputValue.isEmpty) {
+                        return "Please Enter Password";
+                      } else if (!validatePassword(inputValue)) {
+                        return "Please Enter valid Password";
+                      }
+                      return null;
+                    },
+
+                    obscureText: isObsecureText,
+                    obscuringCharacter: "*",
+                    maxLength: 10,
+
+                    decoration: InputDecoration(
+                      suffixIcon: isObsecureText
+                          ? GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isObsecureText = false;
+                                });
+                              },
+                              child: Icon(Icons.visibility_off),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isObsecureText = true;
+                                });
+                              },
+                              child: Icon(Icons.visibility),
+                            ),
+                      hintText: "Please Enter Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 30),
+
+              // Login Button
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color.fromRGBO(69, 182, 74, 1),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+
+                  onPressed: () {
+                    final result = _formKey.currentState!.validate();
+                    print(_emailControlle.text);
+                    print(_passwordController.text);
+                    print(result);
+                  },
+
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Email validation
+  bool checkEmailValidation(String email) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  // Password validation
+  bool validatePassword(String password) {
+    final RegExp passwordRegExp = RegExp(
+        r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$');
+    return passwordRegExp.hasMatch(password);
+  }
+}

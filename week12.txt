@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AnimatedTextExample(),
+    );
+  }
+}
+
+class AnimatedTextExample extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Animated Text Example"),
+        backgroundColor: Colors.blue,
+      ),
+
+      body: Center(
+        child: AnimatedTextKit(
+          animatedTexts: [
+            RotateAnimatedText(
+              'AWESOME',
+              textStyle: TextStyle(
+                fontSize: 30,
+                color: Colors.white,
+                backgroundColor: Colors.blue,
+              ),
+            ),
+
+            RotateAnimatedText(
+              'OPTIMISTIC',
+              textStyle: TextStyle(
+                letterSpacing: 3,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.orange,
+              ),
+            ),
+
+            RotateAnimatedText(
+              'DIFFERENT',
+              textStyle: TextStyle(
+                fontSize: 30,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+
+          isRepeatingAnimation: true,
+          totalRepeatCount: 10,
+          pause: Duration(milliseconds: 1000),
+        ),
+      ),
+    );
+  }
+}
